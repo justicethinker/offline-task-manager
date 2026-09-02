@@ -46,6 +46,12 @@
         "projectId": "52fc12be-f0a0-4ef5-8dd9-25c10971d4d2"
       }
     },
-    "owner": "justice-thinker"
+    "owner": "justice-thinker",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/52fc12be-f0a0-4ef5-8dd9-25c10971d4d2"
+    }
   }
 }
