@@ -1,3 +1,5 @@
+📥 **Download:** [Get the latest Android APK here](https://github.com/justicethinker/offline-task-manager/releases/download/v1.3.0/OfflineTaskManager-v1.3.0.apk)
+
 # Offline Task Manager
 
 A React Native task management app built with Expo SDK 52+, designed to work fully offline with background sync when connectivity returns. Tasks persist in SQLite locally, and an operation queue handles remote sync with retry logic. The UI stays responsive through optimistic state updates — mutations reflect immediately in the list before the network round-trip completes.
@@ -186,9 +188,9 @@ No additional data-fetching or caching library (e.g. TanStack Query) was introdu
 
 ### What I'd Change With More Time
 
-Exponential backoff on retries — currently attempts increment but there's no delay scaling, so a persistently failing endpoint gets hammered. Conflict resolution for concurrent edits — if two devices edit the same task offline, the last write wins, which is wrong. A proper CRDT or field-level merge strategy would be needed. The background sync when the app is fully killed (not just backgrounded) was not attempted — that would require expo-task-manager and platform-specific background fetch configuration.
+Exponential backoff on retries — currently attempts increment but there's no delay scaling, so a persistently failing endpoint gets hammered. Conflict resolution for concurrent edits if two devices edit the same task offline, the last write wins, which is wrong. A proper CRDT or field-level merge strategy would be needed. The background sync when the app is fully killed (not just backgrounded) was not attempted that would require expo-task-manager and platform-specific background fetch configuration.
 
 ---
 
 **License:** MIT
-**Author:** Justice (Ikechukwu Emmanuel Isaac)
+**Author:** Justice Thinker (Ikechukwu Emmanuel)
