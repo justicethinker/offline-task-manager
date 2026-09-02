@@ -32,6 +32,12 @@ const PRIORITY_COLORS: Record<string, string> = {
   high: '#f87171',
 };
 
+const PRIORITY_TEXT_COLORS: Record<string, string> = {
+  low: '#14532d',
+  medium: '#713f12',
+  high: '#7f1d1d',
+};
+
 export default function TaskDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
@@ -78,7 +84,9 @@ export default function TaskDetailScreen() {
             <Text style={styles.title}>{task.title}</Text>
             <View style={styles.headerBadges}>
               <View style={[styles.badge, { backgroundColor: PRIORITY_COLORS[task.priority] }]}>
-                <Text style={styles.badgeText}>{task.priority}</Text>
+                <Text style={[styles.badgeText, { color: PRIORITY_TEXT_COLORS[task.priority] }]}>
+                  {task.priority}
+                </Text>
               </View>
               <SyncStatusBadge isPending={pendingSyncIds.has(task.id)} />
             </View>
@@ -199,7 +207,6 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#000',
     textTransform: 'uppercase',
   },
   description: {

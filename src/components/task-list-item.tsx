@@ -11,6 +11,12 @@ const PRIORITY_COLORS: Record<Task['priority'], string> = {
   high: '#f87171',
 };
 
+const PRIORITY_TEXT_COLORS: Record<Task['priority'], string> = {
+  low: '#14532d',
+  medium: '#713f12',
+  high: '#7f1d1d',
+};
+
 interface TaskListItemProps {
   task: Task;
   onToggle: (id: string) => void;
@@ -54,7 +60,9 @@ function TaskListItemInner({ task, onToggle, onPress, isPendingSync }: TaskListI
         </Text>
         <View style={styles.meta}>
           <View style={[styles.badge, { backgroundColor: PRIORITY_COLORS[task.priority] }]}>
-            <Text style={styles.badgeText}>{task.priority}</Text>
+            <Text style={[styles.badgeText, { color: PRIORITY_TEXT_COLORS[task.priority] }]}>
+              {task.priority}
+            </Text>
           </View>
           <Text style={styles.dueDate}>{formatDueDate(task.dueDate)}</Text>
           <SyncStatusBadge isPending={isPendingSync} />
@@ -121,7 +129,6 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#000',
     textTransform: 'uppercase',
   },
   dueDate: {
