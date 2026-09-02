@@ -9,11 +9,7 @@
     },
     "preview": {
       "android": {
-        "buildType": "apk",
-        "gradleProperties": {
-          "enableProguardInReleaseBuilds": "true",
-          "enableHermes": "true"
-        }
+        "buildType": "apk"
       },
       "distribution": "internal"
     },

@@ -88,16 +88,20 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
     set((state) => ({ tasks: [optimistic, ...state.tasks] }));
 
-    try {
-      const saved = await taskRepo.create(input);
-      set((state) => ({
-        tasks: state.tasks.map((t) => (t.id === optimistic.id ? saved : t)),
-      }));
-      await syncManager.handleMutation(saved, 'create');
-      await get().refreshSyncStatus();
-    } catch (e) {
-      set({ error: String(e) });
-    }
+    const saved = await taskRepo.create(input);
+    set((state) => ({
+      tasks: state.tasks.map((t) => (t.id === optimistic.id ? saved : t)),
+    }));
+
+    // Sync in background — don't block the UI or caller
+    syncManager
+      .handleMutation(saved, 'create')
+      .then(() => {
+        get().refreshSyncStatus();
+      })
+      .catch((e) => {
+        console.error('[Store] background sync failed:', e);
+      });
   },
 
   async editTask(id, changes) {
@@ -110,16 +114,19 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       tasks: state.tasks.map((t) => (t.id === id ? optimistic : t)),
     }));
 
-    try {
-      const saved = await taskRepo.update(id, changes);
-      set((state) => ({
-        tasks: state.tasks.map((t) => (t.id === id ? saved : t)),
-      }));
-      await syncManager.handleMutation(saved, 'update');
-      await get().refreshSyncStatus();
-    } catch (e) {
-      set({ error: String(e) });
-    }
+    const saved = await taskRepo.update(id, changes);
+    set((state) => ({
+      tasks: state.tasks.map((t) => (t.id === id ? saved : t)),
+    }));
+
+    syncManager
+      .handleMutation(saved, 'update')
+      .then(() => {
+        get().refreshSyncStatus();
+      })
+      .catch((e) => {
+        console.error('[Store] background sync failed:', e);
+      });
   },
 
   async deleteTask(id) {
@@ -127,14 +134,16 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     const previous = tasks.find((t) => t.id === id);
     set((state) => ({ tasks: state.tasks.filter((t) => t.id !== id) }));
 
-    try {
-      await taskRepo.delete(id);
-      if (previous) {
-        await syncManager.handleMutation(previous, 'delete');
-      }
-      await get().refreshSyncStatus();
-    } catch (e) {
-      set({ error: String(e) });
+    await taskRepo.delete(id);
+    if (previous) {
+      syncManager
+        .handleMutation(previous, 'delete')
+        .then(() => {
+          get().refreshSyncStatus();
+        })
+        .catch((e) => {
+          console.error('[Store] background sync failed:', e);
+        });
     }
   },
 
@@ -152,16 +161,19 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       tasks: state.tasks.map((t) => (t.id === id ? optimistic : t)),
     }));
 
-    try {
-      const saved = await taskRepo.toggleComplete(id);
-      set((state) => ({
-        tasks: state.tasks.map((t) => (t.id === id ? saved : t)),
-      }));
-      await syncManager.handleMutation(saved, 'toggle');
-      await get().refreshSyncStatus();
-    } catch (e) {
-      set({ error: String(e) });
-    }
+    const saved = await taskRepo.toggleComplete(id);
+    set((state) => ({
+      tasks: state.tasks.map((t) => (t.id === id ? saved : t)),
+    }));
+
+    syncManager
+      .handleMutation(saved, 'toggle')
+      .then(() => {
+        get().refreshSyncStatus();
+      })
+      .catch((e) => {
+        console.error('[Store] background sync failed:', e);
+      });
   },
 
   async flushSync() {

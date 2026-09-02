@@ -30,6 +30,7 @@ export function TaskForm({ initialValues, onSubmit, submitLabel }: TaskFormProps
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   function handleDateChange(_event: DateTimePickerEvent, selectedDate?: Date) {
     setShowDatePicker(Platform.OS === 'ios');
@@ -66,9 +67,12 @@ export function TaskForm({ initialValues, onSubmit, submitLabel }: TaskFormProps
     }
 
     setErrors({});
+    setSubmitError(null);
     setSubmitting(true);
     try {
       await onSubmit(result.data);
+    } catch {
+      setSubmitError('Something went wrong. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -76,6 +80,12 @@ export function TaskForm({ initialValues, onSubmit, submitLabel }: TaskFormProps
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      {submitError ? (
+        <View style={styles.submitErrorBanner}>
+          <Text style={styles.submitErrorText}>{submitError}</Text>
+        </View>
+      ) : null}
+
       <View style={styles.field}>
         <Text style={styles.label}>Title</Text>
         <TextInput
@@ -242,5 +252,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#fff',
+  },
+  submitErrorBanner: {
+    backgroundColor: '#fef2f2',
+    borderWidth: 1,
+    borderColor: '#fca5a5',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 4,
+  },
+  submitErrorText: {
+    fontSize: 14,
+    color: '#dc2626',
+    textAlign: 'center',
   },
 });
