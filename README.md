@@ -42,6 +42,66 @@ npm run typecheck
 npm run lint
 ```
 
+## Project Structure
+
+```
+.
+├── app/                              # Expo Router file-based screens
+│   ├── _layout.tsx                   # Root layout — Stack navigator, starts sync listener
+│   ├── index.tsx                     # Entry redirect to /tasks
+│   └── tasks/
+│       ├── index.tsx                 # Task list — FlashList, sort/filter controls, pull-to-refresh
+│       ├── new.tsx                   # Create task screen
+│       └── [id]/
+│           ├── index.tsx             # Task detail — view, toggle, delete
+│           └── edit.tsx              # Edit task screen
+│
+├── src/
+│   ├── components/                   # Reusable UI components
+│   │   ├── connectivity-indicator.tsx # Online/offline bar with AppState-aware polling
+│   │   ├── sync-status-badge.tsx     # Per-task sync indicator (green check / amber dot)
+│   │   ├── task-form.tsx             # Shared create/edit form with Zod validation
+│   │   └── task-list-item.tsx        # Memoized row — self-subscribes to sync status
+│   │
+│   ├── data/                         # Persistence layer
+│   │   ├── database.ts              # Shared SQLite singleton and migration runner
+│   │   ├── schema.sql.ts            # Table and index DDL as template literals
+│   │   ├── sqlite-task-repository.ts # ITaskRepository backed by expo-sqlite
+│   │   ├── sqlite-sync-queue-repository.ts # ISyncQueueRepository backed by expo-sqlite
+│   │   ├── in-memory-task-repository.ts    # ITaskRepository for tests
+│   │   ├── in-memory-sync-queue-repository.ts # ISyncQueueRepository for tests
+│   │   └── in-memory-task-repository.test.ts  # Repository unit tests
+│   │
+│   ├── domain/                       # Pure interfaces and types — no framework deps
+│   │   ├── task.ts                  # Task type, TaskInput type, Zod schema
+│   │   ├── task-repository.ts       # ITaskRepository interface
+│   │   └── sync-queue-repository.ts # ISyncQueueRepository interface
+│   │
+│   ├── services/                     # Business logic
+│   │   ├── sync-queue.ts            # SyncQueueManager — enqueue, flush, network listener
+│   │   ├── mock-api.ts             # Simulated REST API with delay and failure rate
+│   │   └── sync-queue.test.ts       # Sync queue unit tests
+│   │
+│   ├── store/                        # State management
+│   │   └── task-store.ts            # Zustand store — optimistic updates, sync orchestration
+│   │
+│   └── utils/                        # Shared helpers
+│       └── constants.ts             # Priority color palette used across UI
+│
+├── assets/images/                    # App icons, splash screen, favicon
+│
+├── .github/workflows/               # CI (lint, typecheck, tests) and release automation
+│
+├── with-cleartext-traffic.js        # Custom Expo config plugin for Android cleartext HTTP
+├── eas.json                          # EAS Build profiles (dev, preview, production)
+├── app.json                         # Expo app config — plugins, runtimeVersion, updates URL
+├── tsconfig.json                    # Strict TypeScript with path aliases
+├── babel.config.js                  # Babel preset for Expo
+├── jest.config.js                   # Jest config for expo
+├── jest.setup.js                    # Global mocks (expo-sqlite, expo-network, expo-crypto)
+└── package.json                     # Dependencies and scripts
+```
+
 ## Feature Checklist
 
 | Requirement | Status | Where |
