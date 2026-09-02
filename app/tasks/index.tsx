@@ -28,7 +28,6 @@ export default function TaskListScreen() {
   const loading = useTaskStore((s) => s.loading);
   const sortBy = useTaskStore((s) => s.sortBy);
   const filterBy = useTaskStore((s) => s.filterBy);
-  const pendingSyncIds = useTaskStore((s) => s.pendingSyncIds);
   const loadTasks = useTaskStore((s) => s.loadTasks);
   const toggleTask = useTaskStore((s) => s.toggleTask);
   const setSortBy = useTaskStore((s) => s.setSortBy);
@@ -67,10 +66,9 @@ export default function TaskListScreen() {
         task={item}
         onToggle={handleToggle}
         onPress={handlePress}
-        isPendingSync={pendingSyncIds.has(item.id)}
       />
     ),
-    [handleToggle, handlePress, pendingSyncIds],
+    [handleToggle, handlePress],
   );
 
   const keyExtractor = useCallback((item: (typeof tasks)[number]) => item.id, []);

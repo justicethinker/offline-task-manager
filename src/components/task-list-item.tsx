@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 
 import type { Task } from '../domain/task';
+import { useTaskStore } from '../store/task-store';
 import { PRIORITY_COLORS, PRIORITY_TEXT_COLORS } from '../utils/constants';
 
 import { SyncStatusBadge } from './sync-status-badge';
@@ -10,7 +11,6 @@ interface TaskListItemProps {
   task: Task;
   onToggle: (id: string) => void;
   onPress: (id: string) => void;
-  isPendingSync: boolean;
 }
 
 function formatDueDate(iso: string): string {
@@ -32,7 +32,8 @@ function formatDueDate(iso: string): string {
   return `${months[date.getMonth()]} ${date.getDate()}`;
 }
 
-function TaskListItemInner({ task, onToggle, onPress, isPendingSync }: TaskListItemProps) {
+function TaskListItemInner({ task, onToggle, onPress }: TaskListItemProps) {
+  const isPendingSync = useTaskStore((s) => s.pendingSyncIds.has(task.id));
   return (
     <View style={styles.row}>
       <Pressable
