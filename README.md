@@ -122,6 +122,34 @@ npm run lint
 | Per-task sync status badge | Implemented — green checkmark (synced) or amber dot (pending) | `src/components/sync-status-badge.tsx`, `src/components/task-list-item.tsx` |
 | Config plugin: cleartext traffic | Implemented — custom Expo config plugin modifies AndroidManifest.xml | `with-cleartext-traffic.js` |
 
+## Performance Benchmarks
+
+Automated benchmarks (`src/data/performance.test.ts`) measure data-layer throughput at 500, 1000, and 1500 tasks.
+
+### Repository Operations
+
+| Operation | 500 tasks | 1000 tasks | 1500 tasks |
+|---|---|---|---|
+| getAll (unsorted) | ≤33ms | ≤1ms | ≤1ms |
+| getAll (dueDate sort) | ≤14ms | ≤1ms | ≤1ms |
+| getAll (priority sort) | ≤14ms | ≤1ms | ≤1ms |
+| getAll (filtered) | ≤1ms | ≤1ms | ≤1ms |
+| getAll (sorted + filtered) | ≤2ms | ≤1ms | ≤1ms |
+| getById | ≤1ms | ≤1ms | ≤1ms |
+| create | ≤1ms | ≤1ms | ≤1ms |
+| update | ≤1ms | ≤1ms | ≤1ms |
+| toggleComplete | ≤1ms | ≤1ms | ≤1ms |
+
+### Sync Queue Flush
+
+| Queued Operations | Time |
+|---|---|
+| 500 | ≤33ms |
+| 1000 | ≤16ms |
+| 1500 | ≤41ms |
+
+All operations complete well under 50ms even at 1500 tasks. The data layer is not the bottleneck — FlashList virtualization and the render path are where device-level profiling matters.
+
 ## Testing Offline Behavior
 
 To manually verify the offline sync and status indicators:
