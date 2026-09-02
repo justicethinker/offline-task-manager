@@ -1,3 +1,4 @@
+import * as Crypto from 'expo-crypto';
 import { create } from 'zustand';
 
 import { SqliteSyncQueueRepository } from '../data/sqlite-sync-queue-repository';
@@ -76,7 +77,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
   async addTask(input) {
     const optimistic: Task = {
-      id: crypto.randomUUID(),
+      id: Crypto.randomUUID(),
       title: input.title,
       description: input.description ?? '',
       priority: input.priority,

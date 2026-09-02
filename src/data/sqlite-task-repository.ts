@@ -1,3 +1,4 @@
+import * as Crypto from 'expo-crypto';
 import type { SQLiteDatabase } from 'expo-sqlite';
 import { openDatabaseAsync } from 'expo-sqlite';
 
@@ -87,7 +88,7 @@ export const SqliteTaskRepository: ITaskRepository = {
   async create(input) {
     const database = await getDb();
     const now = new Date().toISOString();
-    const id = crypto.randomUUID();
+    const id = Crypto.randomUUID();
 
     const task: Task = {
       id,

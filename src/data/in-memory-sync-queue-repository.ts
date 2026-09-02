@@ -1,3 +1,5 @@
+import * as Crypto from 'expo-crypto';
+
 import type { ISyncQueueRepository, QueuedOperation } from '../domain/sync-queue-repository';
 
 export function createInMemorySyncQueueRepository(): ISyncQueueRepository {
@@ -10,7 +12,7 @@ export function createInMemorySyncQueueRepository(): ISyncQueueRepository {
 
     async add(operation, payload) {
       const entry: QueuedOperation = {
-        id: crypto.randomUUID(),
+        id: Crypto.randomUUID(),
         operation,
         payload,
         createdAt: new Date().toISOString(),

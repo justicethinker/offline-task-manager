@@ -1,3 +1,5 @@
+import * as Crypto from 'expo-crypto';
+
 import { createInMemorySyncQueueRepository } from '../data/in-memory-sync-queue-repository';
 import { createInMemoryTaskRepository } from '../data/in-memory-task-repository';
 import type { ISyncQueueRepository } from '../domain/sync-queue-repository';
@@ -20,7 +22,7 @@ const mockApi = require('./mock-api') as {
 
 function makeTask(overrides: Partial<Task> = {}): Task {
   return {
-    id: crypto.randomUUID(),
+    id: Crypto.randomUUID(),
     title: 'Test task',
     description: '',
     priority: 'medium',

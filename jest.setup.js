@@ -4,6 +4,11 @@ jest.mock('expo-sqlite', () => ({
   openDatabaseSync: jest.fn(),
 }));
 
+// Mock expo-crypto with a working randomUUID
+jest.mock('expo-crypto', () => ({
+  randomUUID: () => globalThis.crypto.randomUUID(),
+}));
+
 // Mock expo-network
 jest.mock('expo-network', () => ({
   getNetworkStateAsync: jest

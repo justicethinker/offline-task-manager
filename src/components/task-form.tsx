@@ -71,7 +71,8 @@ export function TaskForm({ initialValues, onSubmit, submitLabel }: TaskFormProps
     setSubmitting(true);
     try {
       await onSubmit(result.data);
-    } catch {
+    } catch (e) {
+      console.error('[TaskForm] submit failed:', e);
       setSubmitError('Something went wrong. Please try again.');
     } finally {
       setSubmitting(false);

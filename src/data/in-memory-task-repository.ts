@@ -1,3 +1,5 @@
+import * as Crypto from 'expo-crypto';
+
 import type { Task } from '../domain/task';
 import type { ITaskRepository, PriorityFilter, SortField } from '../domain/task-repository';
 
@@ -34,7 +36,7 @@ export function createInMemoryTaskRepository(): ITaskRepository {
     async create(input) {
       const now = new Date().toISOString();
       const task: Task = {
-        id: crypto.randomUUID(),
+        id: Crypto.randomUUID(),
         title: input.title,
         description: input.description ?? '',
         priority: input.priority,

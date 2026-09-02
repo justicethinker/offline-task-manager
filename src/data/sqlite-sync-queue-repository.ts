@@ -1,3 +1,4 @@
+import * as Crypto from 'expo-crypto';
 import type { SQLiteDatabase } from 'expo-sqlite';
 import { openDatabaseAsync } from 'expo-sqlite';
 
@@ -54,7 +55,7 @@ export const SqliteSyncQueueRepository: ISyncQueueRepository = {
 
   async add(operation, payload) {
     const database = await getDb();
-    const id = crypto.randomUUID();
+    const id = Crypto.randomUUID();
     const createdAt = new Date().toISOString();
 
     const entry: QueuedOperation = {
