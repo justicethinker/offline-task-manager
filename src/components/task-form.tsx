@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   submitButton: {
-    backgroundColor: '#6366f1',
+    backgroundColor: '#475569',
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   submitText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: '#F8FAFC',
   },
   submitErrorBanner: {
     backgroundColor: '#fef2f2',

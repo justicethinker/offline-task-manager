@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9fafb',
   },
   header: {
-    backgroundColor: '#6366f1',
+    backgroundColor: '#334155',
     paddingHorizontal: 16,
     paddingBottom: 12,
     flexDirection: 'row',
@@ -152,14 +152,14 @@ const styles = StyleSheet.create({
   },
   backText: {
     fontSize: 16,
-    color: '#fff',
+    color: '#F8FAFC',
     fontWeight: '500',
   },
   headerTitle: {
     flex: 1,
     fontSize: 18,
     fontWeight: '600',
-    color: '#fff',
+    color: '#F8FAFC',
   },
   content: {
     padding: 16,
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   toggleButton: {
-    backgroundColor: '#6366f1',
+    backgroundColor: '#475569',
   },
   editButton: {
     backgroundColor: '#fff',
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#fff',
+    color: '#F8FAFC',
   },
   editButtonText: {
     color: '#374151',

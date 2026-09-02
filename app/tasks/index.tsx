@@ -196,14 +196,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#f3f4f6',
   },
   chipActive: {
-    backgroundColor: '#6366f1',
+    backgroundColor: '#475569',
   },
   chipText: {
     fontSize: 13,
     color: '#374151',
   },
   chipTextActive: {
-    color: '#fff',
+    color: '#F8FAFC',
     fontWeight: '600',
   },
   center: {
@@ -228,14 +228,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   header: {
-    backgroundColor: '#6366f1',
+    backgroundColor: '#334155',
     paddingHorizontal: 16,
     paddingBottom: 12,
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#fff',
+    color: '#F8FAFC',
   },
   fab: {
     position: 'absolute',
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#6366f1',
+    backgroundColor: '#475569',
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 6,
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   },
   fabText: {
     fontSize: 28,
-    color: '#fff',
+    color: '#F8FAFC',
     lineHeight: 30,
   },
 });
