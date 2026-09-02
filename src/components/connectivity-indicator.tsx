@@ -14,7 +14,17 @@ export function ConnectivityIndicator() {
     const sub = addNetworkStateListener((event) => {
       setIsConnected(event.isConnected ?? true);
     });
-    return () => sub.remove();
+
+    // Poll as a fallback — Android's onLost callback can be delayed
+    // by 30+ seconds due to network validation probes.
+    const poll = setInterval(() => {
+      getNetworkStateAsync().then((state) => setIsConnected(state.isConnected ?? true));
+    }, 5000);
+
+    return () => {
+      sub.remove();
+      clearInterval(poll);
+    };
   }, []);
 
   if (syncing) {
