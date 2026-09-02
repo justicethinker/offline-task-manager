@@ -4,6 +4,8 @@ A React Native task management app built with Expo SDK 52+, designed to work ful
 
 ## Setup
 
+No backend server is required — the "remote API" is entirely simulated locally within `src/services/mock-api.ts`.
+
 ```bash
 npm install
 ```
@@ -42,22 +44,23 @@ npm run lint
 
 ## Feature Checklist
 
-| Requirement | Status |
-|---|---|
-| Create, edit, delete tasks | Implemented — form uses Zod validation with inline errors |
-| Task fields: title, description, priority, due date, completed | Implemented — all fields stored in SQLite |
-| Priority levels (low, medium, high) | Implemented — segmented control in form, colored badges in list |
-| Sort by due date / priority | Implemented — SQL-level ORDER BY, not in-memory |
-| Filter by priority | Implemented — SQL-level WHERE clause |
-| Offline persistence | Implemented — expo-sqlite, all mutations persist locally first |
-| Background sync queue | Implemented — FIFO queue with attempt tracking, retries on next flush |
-| Connectivity indicator | Implemented — thin bar (offline/syncing), not a blocking modal |
-| Pull-to-refresh | Implemented — triggers sync flush then reloads from repository |
-| Optimistic UI updates | Implemented — local state updates immediately, sync happens async |
-| 500+ tasks performance | Implemented — FlashList v2, indexed sort/filter columns |
-| Native date picker | Implemented — @react-native-community/datetimepicker |
-| Confirmation before delete | Implemented — Alert.alert with destructive action |
-| Per-task sync status badge | Implemented — green checkmark (synced) or amber dot (pending) |
+| Requirement | Status | Where |
+|---|---|---|
+| Create, edit, delete tasks | Implemented — form uses Zod validation with inline errors | `src/components/task-form.tsx`, `app/tasks/new.tsx`, `app/tasks/[id]/edit.tsx`, `app/tasks/[id]/index.tsx` |
+| Task fields: title, description, priority, due date, completed | Implemented — all fields stored in SQLite | `src/domain/task.ts`, `src/data/sqlite-task-repository.ts` |
+| Priority levels (low, medium, high) | Implemented — segmented control in form, colored badges in list | `src/components/task-form.tsx`, `src/components/task-list-item.tsx` |
+| Sort by due date / priority | Implemented — SQL-level ORDER BY, not in-memory | `src/data/sqlite-task-repository.ts` |
+| Filter by priority | Implemented — SQL-level WHERE clause | `src/data/sqlite-task-repository.ts` |
+| Offline persistence | Implemented — expo-sqlite, all mutations persist locally first | `src/data/sqlite-task-repository.ts` |
+| Background sync queue | Implemented — FIFO queue with attempt tracking, retries on next flush | `src/services/sync-queue.ts`, `src/data/sqlite-sync-queue-repository.ts` |
+| Connectivity indicator | Implemented — thin bar (offline/syncing), not a blocking modal | `src/components/connectivity-indicator.tsx` |
+| Pull-to-refresh | Implemented — triggers sync flush then reloads from repository | `app/tasks/index.tsx` |
+| Optimistic UI updates | Implemented — local state updates immediately, sync happens async | `src/store/task-store.ts` |
+| 500+ tasks performance | Implemented — FlashList v2, indexed sort/filter columns | `app/tasks/index.tsx`, `src/data/schema.sql.ts` |
+| Native date picker | Implemented — @react-native-community/datetimepicker | `src/components/task-form.tsx` |
+| Confirmation before delete | Implemented — Alert.alert with destructive action | `app/tasks/[id]/index.tsx` |
+| Per-task sync status badge | Implemented — green checkmark (synced) or amber dot (pending) | `src/components/sync-status-badge.tsx`, `src/components/task-list-item.tsx` |
+| Config plugin: cleartext traffic | Implemented — custom Expo config plugin modifies AndroidManifest.xml | `with-cleartext-traffic.js` |
 
 ## Testing Offline Behavior
 
@@ -89,6 +92,15 @@ Operations are queued rather than snapshots because: payloads stay small (a togg
 
 `SyncQueueManager.flush()` processes the queue in FIFO order. On success, the entry is removed. On failure, the attempt count increments and it stays queued for the next flush cycle. The queue is flushed automatically when connectivity is restored (via `expo-network` listener) and manually on pull-to-refresh.
 
+### Deliberately Not Used
+
+No additional data-fetching or caching library (e.g. TanStack Query) was introduced. SQLite is already the local source of truth, and the sync queue already handles staleness and retry. Adding a caching layer on top of that would be redundant complexity with no added value.
+
 ### What I'd Change With More Time
 
 Exponential backoff on retries — currently attempts increment but there's no delay scaling, so a persistently failing endpoint gets hammered. Conflict resolution for concurrent edits — if two devices edit the same task offline, the last write wins, which is wrong. A proper CRDT or field-level merge strategy would be needed. The background sync when the app is fully killed (not just backgrounded) was not attempted — that would require expo-task-manager and platform-specific background fetch configuration.
+
+---
+
+**License:** MIT
+**Author:** Justice (Ikechukwu Emmanuel Isaac)
