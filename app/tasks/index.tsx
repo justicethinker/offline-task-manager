@@ -167,7 +167,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9fafb',
   },
   controls: {
-    padding: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     backgroundColor: '#fff',
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#e5e7eb',

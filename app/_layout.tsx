@@ -22,6 +22,9 @@ export default function RootLayout() {
       >
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="tasks" options={{ headerShown: false }} />
+        <Stack.Screen name="tasks/new" options={{ headerShown: false }} />
+        <Stack.Screen name="tasks/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="tasks/[id]/edit" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="light" />
     </SafeAreaProvider>

@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
-    gap: 16,
+    gap: 20,
   },
   field: {
     gap: 6,
