@@ -1,6 +1,6 @@
 import { addNetworkStateListener, getNetworkStateAsync } from 'expo-network';
-import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { AppState, View, Text, StyleSheet } from 'react-native';
 
 import { useTaskStore } from '../store/task-store';
 
@@ -15,15 +15,44 @@ export function ConnectivityIndicator() {
       setIsConnected(event.isConnected ?? true);
     });
 
-    // Poll as a fallback — Android's onLost callback can be delayed
-    // by 30+ seconds due to network validation probes.
-    const poll = setInterval(() => {
-      getNetworkStateAsync().then((state) => setIsConnected(state.isConnected ?? true));
-    }, 5000);
+    return () => sub.remove();
+  }, []);
+
+  // Poll as a fallback — Android's onLost callback can be delayed
+  // by 30+ seconds due to network validation probes. Pause while
+  // backgrounded to avoid unnecessary battery drain.
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    function startPolling() {
+      if (pollRef.current) return;
+      pollRef.current = setInterval(() => {
+        getNetworkStateAsync().then((state) => setIsConnected(state.isConnected ?? true));
+      }, 5000);
+    }
+
+    function stopPolling() {
+      if (pollRef.current) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
+    }
+
+    if (AppState.currentState === 'active') {
+      startPolling();
+    }
+
+    const sub = AppState.addEventListener('change', (next) => {
+      if (next === 'active') {
+        startPolling();
+      } else {
+        stopPolling();
+      }
+    });
 
     return () => {
+      stopPolling();
       sub.remove();
-      clearInterval(poll);
     };
   }, []);
 
