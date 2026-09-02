@@ -4,13 +4,9 @@ import { ScrollView, View, Text, TextInput, Pressable, StyleSheet, Platform } fr
 
 import type { TaskInput } from '../domain/task';
 import { taskInputSchema } from '../domain/task';
+import { PRIORITY_COLORS } from '../utils/constants';
 
 const PRIORITIES: TaskInput['priority'][] = ['low', 'medium', 'high'];
-const PRIORITY_COLORS: Record<TaskInput['priority'], string> = {
-  low: '#4ade80',
-  medium: '#facc15',
-  high: '#f87171',
-};
 
 interface TaskFormProps {
   initialValues?: Partial<TaskInput>;

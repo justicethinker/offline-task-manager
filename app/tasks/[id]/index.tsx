@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { SyncStatusBadge } from '@/src/components/sync-status-badge';
 import { useTaskStore } from '@/src/store/task-store';
+import { PRIORITY_COLORS, PRIORITY_TEXT_COLORS } from '@/src/utils/constants';
 
 function formatDueDate(iso: string): string {
   const date = new Date(iso);
@@ -25,18 +26,6 @@ function formatTimestamp(iso: string): string {
     minute: '2-digit',
   });
 }
-
-const PRIORITY_COLORS: Record<string, string> = {
-  low: '#4ade80',
-  medium: '#facc15',
-  high: '#f87171',
-};
-
-const PRIORITY_TEXT_COLORS: Record<string, string> = {
-  low: '#14532d',
-  medium: '#713f12',
-  high: '#7f1d1d',
-};
 
 export default function TaskDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
